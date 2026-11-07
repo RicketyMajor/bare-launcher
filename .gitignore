@@ -1,0 +1,26 @@
+# Android / Gradle
+.gradle/
+build/
+local.properties
+*.iml
+.idea/
+.kotlin/
+captures/
+.externalNativeBuild/
+.cxx/
+*.apk
+*.aab
+*.keystore
+*.jks
+
+# Reference repos (cloned in Phase 0, never part of the build)
+refs/
+
+# Local-only working notes
+context/
+CLAUDE.local.md
+.claude/settings.local.json
+
+# OS
+.DS_Store
+Thumbs.db
