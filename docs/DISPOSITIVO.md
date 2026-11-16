@@ -22,6 +22,7 @@ Detectado por ADB el 2026-11-07. La spec suponía un Redmi Note 10 o Note 11; el
 |---|---|---|
 | Launcher actual | `app.olauncher/.MainActivity` (Olauncher) | El usuario ya usa un launcher de texto |
 | Navegación (`navigation_mode`) | 0 = 3 botones | Ya cumple 9.3 |
+| VPN siempre activa (`always_on_vpn_app`) | `com.tailscale.ipn` (Tailscale) | Choca con M5; ver ADR-004 |
 | DNS privado (`private_dns_mode`) | sin definir (Android usa "automático") | Hay que dejarlo en **desactivado** para M5 |
 | Apps de terceros | 106 paquetes, 121 actividades launcher | Inventario completo en `inventario-apps.md` |
 | Instagram oficial | no instalado | Se reinstala en F4 solo para recibir notificaciones |
