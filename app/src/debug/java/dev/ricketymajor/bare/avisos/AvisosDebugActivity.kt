@@ -1,5 +1,7 @@
 package dev.ricketymajor.bare.avisos
 
+import android.app.NotificationManager
+import android.content.ComponentName
 import android.content.Intent
 import android.os.Bundle
 import android.provider.Settings
@@ -58,7 +60,7 @@ class AvisosDebugActivity : ComponentActivity() {
                         |  ch   ${e.channel} · imp ${e.importance}
                         |  cat  ${e.category} · grupo ${e.groupConversation.si()} · conv ${e.conversation.si()} · curso ${e.ongoing.si()}
                         |  tpl  ${e.template}
-                        |  keys ${e.extrasKeys.joinToString()}
+                        |  keys ${e.extrasKeys.joinToString { it.removePrefix("android.") }}
                         """.trimMargin(),
                         style = dim,
                     )
@@ -67,8 +69,8 @@ class AvisosDebugActivity : ComponentActivity() {
         }
     }
 
-    private fun hasAccess() = Settings.Secure.getString(contentResolver, "enabled_notification_listeners")
-        ?.contains(packageName) == true
+    private fun hasAccess() = getSystemService(NotificationManager::class.java)
+        .isNotificationListenerAccessGranted(ComponentName(this, AvisosService::class.java))
 }
 
 private fun Boolean.si() = if (this) "sí" else "no"
