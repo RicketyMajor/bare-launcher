@@ -24,6 +24,26 @@ Datos de `:avisos-debug` y de `dumpsys notification` (sin texto) en el Redmi 10 
 
 - Hay un canal por cuenta, y el ID incluye la dirección de email. Las reglas deben usar el paquete, no el canal.
 
+## Canales declarados (sin muestra todavía)
+
+Leídos de `dumpsys notification` (sección `AppSettings`, la definición de cada canal) el 2026-11-07, sin que llegara ninguna notificación. Sirven para saber qué esperar; **la categoría y `isGroupConversation` solo se confirman con una notificación real.**
+
+| App | Canal | Importancia | Probable uso |
+|---|---|---|---|
+| Telegram (`org.telegram.messenger`) | `0channel_private_<hash>` | 4 | Chats individuales |
+| | `0channel_groups_<hash>` | 4 | Grupos |
+| | `0channel_groups_ia_<hash>` | 4 | Grupos (variante) |
+| | `0channel_silent_<hash>` | 2 | Silenciosas |
+| | `Other3` | 3 | Otras |
+| Mensajes (`com.google.android.apps.messaging`) | `bugle_default_channel` | 4 | SMS/RCS |
+| Sistema (`com.android.phone`) | `sms` | 4 | SMS del sistema (¿clase 0 / operador?) |
+| Teléfono (`com.google.android.dialer`, marcador predeterminado) | `phone_missed_call` | 3 | Llamada perdida |
+| Telecom de HyperOS (`com.android.server.telecom`) | `MiuiTelecomMissedCalls` | 4 | Llamada perdida (**segundo candidato**) |
+
+- Los canales de Telegram llevan un hash, igual que los de WhatsApp llevan un número. Las reglas van por paquete + `es_grupo`.
+- Telegram todavía no creó un canal para los **canales** de difusión. Los crea con la primera notificación de ese tipo, así que probablemente están silenciados.
+- **Llamadas perdidas: hay dos posibles emisores.** Si publican los dos, el clasificador debe quedarse con uno y no contar la llamada dos veces. Hay que confirmarlo con una llamada real.
+
 ## Otras observadas
 
 | App | Canal | Categoría | Notas |
@@ -38,9 +58,12 @@ Datos de `:avisos-debug` y de `dumpsys notification` (sin texto) en el Redmi 10 
 2. `es_grupo` es confiable en WhatsApp. Falta verificarlo en Telegram.
 3. En la configuración, preferir paquete + categoría + `es_grupo` y dejar `channelId` solo como último recurso.
 
-## Pendiente
+## Pendiente (antes de F2)
 
-- **Telegram**: chat individual, grupo y canal.
-- **SMS** (`com.google.android.apps.messaging`) y **llamada perdida** (`com.google.android.dialer`, ¿`CATEGORY_MISSED_CALL`?).
+Muestras reales. Cuando llegue una de estas notificaciones, el usuario la deja en la bandeja y se lee con `dumpsys notification`:
+
+- **Telegram**: chat individual, grupo y canal. Confirmar `isGroupConversation` en los grupos.
+- **SMS**: confirmar canal y categoría (¿`msg`?).
+- **Llamada perdida**: ¿`CATEGORY_MISSED_CALL`? ¿La publica el marcador, Telecom de HyperOS o los dos?
 - **Canvas Student**, Banco de Chile y Pluxee: confirmar categoría cuando llegue alguna.
 - **Instagram**: en la Fase 4, con la app oficial reinstalada.
