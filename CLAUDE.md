@@ -21,6 +21,8 @@ $adb = "$env:LOCALAPPDATA\Android\Sdk\platform-tools\adb.exe"   # adb is not on 
 & $adb devices -l              # check the phone is connected
 ```
 
+Wireless debugging is paired with this PC. Connect with `adb connect <ip>:<port>`; the port changes after a reboot or a wireless-debugging toggle, find it with `adb mdns services` (`_adb-tls-connect._tcp`). If the cable is also plugged in the phone shows twice: set `ANDROID_SERIAL` to one of them, or `installDebug` installs twice and `adb shell` fails.
+
 HyperOS gotchas: every ADB install shows an on-phone "Install via USB" prompt (~10 s to accept); after several cancelled installs HyperOS adds the app to "Install via USB › Denied installation" and silently rejects with `INSTALL_FAILED_USER_RESTRICTED` until the user clears it. Without MIUI autostart the notification listener is never bound (enabled but not "live"), and **every reinstall resets autostart** → after each install run `adb shell appops set dev.ricketymajor.bare 10008 allow` (works without "USB debugging (Security settings)"), then toggle `cmd notification disallow_listener/allow_listener` to force a rebind if needed. From Git Bash, prefix adb commands that take device paths with `MSYS_NO_PATHCONV=1`.
 
 ## Conventions
